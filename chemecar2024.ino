@@ -27,6 +27,9 @@
 #include <Adafruit_AS7341.h>
 #include "state.h"
 
+// Relay Pin
+#define RELAY_PIN 2
+
 /*
  * MODE FLAGS:
  * These flags can be set to true or false to change the behavior of the system.
@@ -69,6 +72,13 @@ void setup()
     // Set system state to NOT_READY
     SYS_STATE = NOT_READY;
 
+    // Set relay pin to output
+    pinMode(RELAY_PIN, OUTPUT);
+
+    // Set relay to off
+    digitalWrite(RELAY_PIN, LOW);
+
+    // Start serial communication
     Serial.begin(115200);
 
     // Wait for communication with the spectrometer sensor
@@ -120,6 +130,10 @@ void loop()
                 Serial.println("Starting calibration measurement.");
                 reactionTime = millis(); // For debugging and measurement purposes
             }
+            if (MOTOR_ACTIVE)
+            {
+                digitalWrite(RELAY_PIN, HIGH);
+            }
         }
         break;
     case RUNNING:
@@ -138,6 +152,11 @@ void loop()
             if (CALIBRATION_MODE)
             {
                 printResults();
+            }
+            // Turn off the motor
+            if (MOTOR_ACTIVE)
+            {
+                digitalWrite(RELAY_PIN, LOW);
             }
         }
         break;
