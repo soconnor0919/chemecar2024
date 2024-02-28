@@ -1,0 +1,5 @@
+{
+    "sketch": "chemecar2024.ino",
+    "board": "arduino:avr:uno",
+    "output": "build/"
+}
