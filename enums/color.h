@@ -27,7 +27,7 @@ const RGB colorValues[] = {
     {255, 255, 0},  // Yellow
     {0, 255, 255},  // Cyan
     {255, 0, 255},  // Magenta
-    {255, 165, 0},  // Orange
+    {255, 50, 0},  // Orange
     {255, 255, 255},// White
     {0, 0, 0},      // Black
     {0, 0, 0}       // Custom
