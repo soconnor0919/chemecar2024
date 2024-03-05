@@ -3,7 +3,7 @@
 
 // Digital Pins
 #define LED_PIN 3
-#define MOTOR_PIN 6
+#define MOTOR_PIN 11
 #define PUMP_PIN 5
 
 // LED Count
