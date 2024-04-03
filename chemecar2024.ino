@@ -62,16 +62,6 @@ state SYS_STATE;
 // Store how long the reaction took for calibration purposes
 unsigned long reactionDuration = 0;
 
-/*
- * MEASUREMENT THRESHOLD VALUES:
- * For the Luminol reaction, the threshold values are:
- * Start: 1000, End: 100
- * For testing purposes, the threshold values are:
- * Start: 500, End: 50
- */
-uint16_t START_THRESHOLD = 1000;
-uint16_t END_THRESHOLD = 100;
-
 void setup() {
     // Set system state to NOT_READY
     SYS_STATE = NOT_READY;
@@ -88,13 +78,27 @@ void setup() {
     // Start serial communication
     Serial.begin(115200);
 
+    if (LED_ACTIVE) {
+        // Initialize LEDs
+        initLED();
+        setLEDColor(Color::GREEN);
+    }
+
     // Wait for communication with the spectrometer sensor
     if (!as7341.begin()) {
+        // setLEDColor(Color::BLUE);
         // Sensor not found. Check connections, and wait to try again.
         Serial.println("Could not find spectrometer sensor. Check your connections.");
         while (1) {
-            delay(10);
+            setLEDColor(Color::RED);
+            delay(500);
+            setLEDColor(Color::BLACK);
+            delay(500);
         }
+    } else {
+        colorWipe(Color::BLUE, 50);
+        colorWipe(Color::ORANGE, 50);
+        setLEDColor(Color::GREEN);
     }
 
     // Configure spectrometer sensor
@@ -102,17 +106,11 @@ void setup() {
     as7341.setASTEP(999);
     as7341.setGain(AS7341_GAIN_256X);
 
-    if (LED_ACTIVE) {
-        // Initialize LEDs
-        initLED();
-        // Default LEDs to orange
-        setLEDColor(Color::ORANGE);
-    }
-
     // Set system state to READY
     SYS_STATE = READY;
     
     Serial.println("Waiting for activation...");
+    // digitalWrite(MOTOR_PIN, HIGH);
 }
 
 void loop() {
@@ -131,6 +129,7 @@ void loop() {
         break;
     case READY:
         // System is waiting for activation threshold
+        if (VERBOSE_MODE) { printData(); }
         if (as7341.getChannel(AS7341_CHANNEL_480nm_F3) >= START_THRESHOLD) {
             SYS_STATE = RUNNING;
             // Print calibration message if in calibration mode, initialize reactionDuration
@@ -163,13 +162,8 @@ void loop() {
         }
         // Set LED color based off of measurement
         if (LED_ACTIVE) {
-            // Map the 480nm channel to the LED color, with the threshold values as the range. 
-            // The LED will be green at the start threshold and red at the end threshold.
-            setLEDColor(
-                map(as7341.getChannel(AS7341_CHANNEL_480nm_F3), START_THRESHOLD, END_THRESHOLD, 0, 255),    // Red
-                map(as7341.getChannel(AS7341_CHANNEL_480nm_F3), START_THRESHOLD, END_THRESHOLD, 255, 0),    // Green
-                0   // Blue
-            );
+            // Set the LED color to yellow when reaction is ongoing.
+            setLEDColor(Color::YELLOW);
         }
         break;
     case DONE:
