@@ -16,7 +16,8 @@
  * For testing purposes, the threshold values are:
  * Start: 500, End: 50
  */
-uint16_t START_THRESHOLD = 300;
-uint16_t END_THRESHOLD = 50;
+uint16_t START_THRESHOLD = 1000;
+uint16_t END_THRESHOLD = 150;
+uint16_t MAX_THRESHOLD = 5000;
 
 #endif // CONSTANTS_H

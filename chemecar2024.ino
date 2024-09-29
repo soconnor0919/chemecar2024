@@ -49,12 +49,14 @@
  * MOTOR_ACTIVE: true
  * PUMP_ACTIVE: true
  * LED_ACTIVE: true
+ * DEMO_MODE: false
  */
-bool CALIBRATION_MODE = false;
-bool VERBOSE_MODE = false;
+bool CALIBRATION_MODE = true;
+bool VERBOSE_MODE = true;
 bool MOTOR_ACTIVE = true;
 bool PUMP_ACTIVE = true;
 bool LED_ACTIVE = true;
+bool DEMO_MODE = false;
 
 // System state
 state SYS_STATE;
@@ -81,9 +83,11 @@ void setup() {
     if (LED_ACTIVE) {
         // Initialize LEDs
         initLED();
-        setLEDColor(Color::GREEN);
+        setLEDColor(Color::WHITE);
+        Serial.println("LEDs initialized.");
     }
 
+    Serial.println("Initializing spectrometer sensor...");
     // Wait for communication with the spectrometer sensor
     if (!as7341.begin()) {
         // setLEDColor(Color::BLUE);
@@ -96,6 +100,7 @@ void setup() {
             delay(500);
         }
     } else {
+        Serial.println("Spectrometer sensor initialized.");
         colorWipe(Color::BLUE, 50);
         colorWipe(Color::ORANGE, 50);
         setLEDColor(Color::GREEN);
@@ -111,6 +116,16 @@ void setup() {
     
     Serial.println("Waiting for activation...");
     // digitalWrite(MOTOR_PIN, HIGH);
+
+    // if (DEMO_MODE) {
+    //     while (DEMO_MODE) {
+    //         if (LED_ACTIVE) {
+    //             colorWipe(Color::ORANGE, 50);
+    //             colorWipe(Color::BLUE, 50);
+    //         }
+    //     }
+    // }
+    
 }
 
 void loop() {
@@ -162,8 +177,7 @@ void loop() {
         }
         // Set LED color based off of measurement
         if (LED_ACTIVE) {
-            // Set the LED color to yellow when reaction is ongoing.
-            setLEDColor(Color::YELLOW);
+            setLEDColor(Color::BLUE);
         }
         break;
     case DONE:
