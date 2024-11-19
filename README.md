@@ -1,5 +1,8 @@
 # 2024 Bucknell Chem-E-Car Control System Code
 
+## DISCLAIMER
+**This repository has been archived in favor of [control-system-na24](https://github.com/soconnor0919/control-system-na24) as the Arduino VSCode extension has been discontinued. We have moved development over to the PlatformIO framework.**
+
 ## Description
 This repository contains the code for the 2024 Bucknell Chem-E-Car Control System. The Chem-E-Car is a chemical-powered car that is designed to compete in the annual AIChE Chem-E-Car competition. The competition involves designing and building a car that is powered and stopped by a chemical reaction and can stop at a predetermined distance.
 
